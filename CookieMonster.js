@@ -542,6 +542,13 @@ for (var i = 0; i < 101; i++) {
 CM.ConfigData.GCSoundURL = {label: 'Golden Cookie Sound URL:', desc: 'URL of the sound to be played when a Golden Cookie spawns'};
 CM.ConfigData.GCTimer = {label: ['Golden Cookie Timer OFF', 'Golden Cookie Timer ON'], desc: 'A timer on the Golden Cookie when it has been spawned', toggle: true, func: function() {CM.Disp.ToggleGCTimer();}};
 CM.ConfigData.Favicon = {label: ['Favicon OFF', 'Favicon ON'], desc: 'Update favicon with Golden/Wrath Cookie', toggle: true, func: function() {CM.Disp.UpdateFavicon();}};
+CM.ConfigData.FortuneFlash = {label: ['Fortune Cookie Flash OFF', 'Fortune Cookie Flash ON'], desc: 'Flash screen on Fortune Cookie', toggle: true};
+CM.ConfigData.FortuneSound = {label: ['Fortune Cookie Sound OFF', 'Fortune Cookie Sound ON'], desc: 'Play a sound on Fortune Cookie', toggle: true};
+CM.ConfigData.FortuneVolume = {label: [], desc: 'Volume of the Fortune Cookie sound'};
+for (var i = 0; i < 101; i++) {
+    CM.ConfigData.FortuneVolume.label[i] = i + '%';
+}
+CM.ConfigData.FortuneSoundURL = {label: 'Fortune Cookie Sound URL:', desc: 'URL of the sound to be played when the Ticker has a Fortune Cookie'};
 CM.ConfigData.SeaFlash = {label: ['Season Special Flash OFF', 'Season Special Flash ON'], desc: 'Flash screen on Season Popup', toggle: true};
 CM.ConfigData.SeaSound = {label: ['Season Special Sound OFF', 'Season Special Sound ON'], desc: 'Play a sound on Season Popup', toggle: true};
 CM.ConfigData.SeaVolume = {label: [], desc: 'Volume of the Season Special sound'};
@@ -1449,6 +1456,12 @@ CM.Disp.CheckGoldenCookie = function() {
 	}
 }
 
+CM.Disp.CheckTickerFortune = function() {
+	if (Game.TickerEffect && Game.TickerEffect.type == 'fortune') {
+		CM.Disp.Flash(3, 'FortuneFlash');
+		CM.Disp.PlaySound(CM.Config.FortuneSoundURL, 'FortuneSound', 'FortuneVolume');
+	}
+}
 
 CM.Disp.CheckSeasonPopup = function() {
 	if (CM.Disp.lastSeasonPopupState != Game.shimmerTypes['reindeer'].spawned) {
@@ -1692,6 +1705,10 @@ CM.Disp.AddMenuPref = function(title) {
 	frag.appendChild(url('GCSoundURL'));
 	frag.appendChild(listing('GCTimer'));
 	frag.appendChild(listing('Favicon'));
+	frag.appendChild(listing('FortuneFlash'));
+	frag.appendChild(listing('FortuneSound'));
+	frag.appendChild(vol('FortuneVolume'));
+	frag.appendChild(url('FortuneSoundURL'));
 	frag.appendChild(listing('SeaFlash'));
 	frag.appendChild(listing('SeaSound'));
 	frag.appendChild(vol('SeaVolume'));
@@ -2902,6 +2919,10 @@ CM.ConfigDefault = {
 	GCSoundURL: 'https://freesound.org/data/previews/66/66717_931655-lq.mp3', 
 	GCTimer: 1, 
 	Favicon: 1, 
+	FortuneFlash: 1, 
+	FortuneSound: 1,  
+	FortuneVolume: 100, 
+	FortuneSoundURL: 'https://freesound.org/data/previews/419/419594_7062176-lq.mp3',
 	SeaFlash: 1, 
 	SeaSound: 1,  
 	SeaVolume: 100, 
@@ -2928,8 +2949,8 @@ CM.ConfigDefault = {
 };
 CM.ConfigPrefix = 'CMConfig';
 
-CM.VersionMajor = '2.019';
-CM.VersionMinor = '1';
+CM.VersionMajor = '2.021';
+CM.VersionMinor = '0';
 
 /*******
  * Sim *
@@ -2950,7 +2971,7 @@ CM.Sim.BuildingGetPrice = function(basePrice, start, free, increase) {
 	var moni = 0;
 	for (var i = 0; i < increase; i++) {
 		var price = basePrice * Math.pow(Game.priceIncrease, Math.max(0, start - free));
-		price = Game.modifyBuildingPrice(null, price);
+		price = Game.modifyBuildingPrice({}, price); //per darkenvy's fix
 		price = Math.ceil(price);
 		moni += price;
 		start++;
@@ -2979,7 +3000,7 @@ CM.Sim.BuildingSell = function(basePrice, start, free, amount, emuAura) {
 	var moni=0;
 	for (var i = 0; i < amount; i++) {
 		var price = basePrice * Math.pow(Game.priceIncrease, Math.max(0, start - free));
-		price = Game.modifyBuildingPrice(null, price);
+		price = Game.modifyBuildingPrice({}, price); //per darkenvy's fix
 		price = Math.ceil(price);
 		var giveBack = 0.25;
 		if (Game.hasAura('Earth Shatterer') || emuAura) giveBack = 0.5;
