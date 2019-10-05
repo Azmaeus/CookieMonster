@@ -2839,6 +2839,9 @@ CM.Loop = function() {
 	// Check Golden Cookies
 	CM.Disp.CheckGoldenCookie();
 
+	// Check Fortune Cookies
+	CM.Disp.CheckTickerFortune();
+
 	// Check Season Popup
 	CM.Disp.CheckSeasonPopup();
 
