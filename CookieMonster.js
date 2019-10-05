@@ -1459,7 +1459,7 @@ CM.Disp.CheckGoldenCookie = function() {
 CM.Disp.CheckTickerFortune = function() {
 	if (Game.TickerEffect && Game.TickerEffect.type == 'fortune') {
 		CM.Disp.Flash(3, 'FortuneFlash');
-		CM.Disp.PlaySound(CM.Config.FortuneSoundURL, 'FortuneSound', 'FortuneVolume');
+		CM.Disp.PlaySound(CM.ConfigData.FortuneSoundURL, 'FortuneSound', 'FortuneVolume');
 	}
 }
 
