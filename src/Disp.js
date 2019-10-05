@@ -915,7 +915,7 @@ CM.Disp.UpdateTitle = function() {
 		var addSP = false;
 
 		var titleGC;
-		var titleFC;
+		var titleFC = '';
 		var titleSP;
 		if (CM.Disp.lastGoldenCookieState) {
 			if (CM.Disp.goldenShimmer.wrath) {
